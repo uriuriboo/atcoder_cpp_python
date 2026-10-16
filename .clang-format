@@ -1,0 +1,9 @@
+# C++ の保存時フォーマット（.vscode/settings.json）のスタイル
+# 競プロのコードは 1 行が長くなりがちなので、行の折り返しはしない
+BasedOnStyle: Google
+IndentWidth: 4
+ColumnLimit: 0
+AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortLoopsOnASingleLine: true
+AllowShortBlocksOnASingleLine: Always
+AllowShortFunctionsOnASingleLine: All

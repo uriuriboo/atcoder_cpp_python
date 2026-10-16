@@ -1,49 +1,47 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    // どちらも input.txt を標準入力にする。書き換えずに使えるよう、問題には依存させていない
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "C++(gdb):Current File",
+            // 最後に build・build & test などでビルドした問題（build/debug/current）をデバッグする
+            "name": "Debug C++",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/tmp/a.out",
+            "program": "${workspaceFolder}/build/debug/current",
             "args": [
-              "<",
-              "${workspaceFolder}/input.txt"
-            ],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "externalConsole": false,
-            "MIMode": "gdb",
-            //"preLaunchTask":"cpp build",
-            "miDebuggerPath":"/usr/bin/gdb",
-            "setupCommands": [
-				{
-					"description": "Enable pretty-printing for gdb",
-					"text": "-enable-pretty-printing",
-					"ignoreFailures": true
-				}
-			],
-            /*
-            "console": "integratedTerminal",
-            "stdio": [
+                "<",
                 "${workspaceFolder}/input.txt"
             ],
-            */
+            "cwd": "${workspaceFolder}",
+            "environment": [
+                // メモリリークを実行時エラーにしない（Dockerfile の ENV と同じ）
+                {
+                    "name": "ASAN_OPTIONS",
+                    "value": "detect_leaks=0"
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
         },
-        // {
-        //     "name": "Python: Current File",
-        //     "type": "python",
-        //     "request": "launch",
-        //     "stopOnEntry": true,
-        //     "program": "${file}",
-        //     "args": [ "<",
-        //               "${workspaceFolder}/input.txt"
-        //             ],
-        //     "console": "integratedTerminal"
-
-        // },
+        {
+            // 開いている .py（解答・gen.py・naive.py）をデバッグする。.py 以外を開いているときは、最後にビルドした .py の解答
+            "name": "Debug Python",
+            "type": "debugpy",
+            "request": "launch",
+            "python": "/home/vscode/.venv/bin/python",
+            "program": "${workspaceFolder}/scripts/debug_python.py",
+            "args": [
+                "${file}"
+            ],
+            "console": "integratedTerminal"
+        }
     ]
 }

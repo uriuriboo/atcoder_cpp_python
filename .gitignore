@@ -1,4 +1,6 @@
-field/contests/
-tmp/*
+contests/
+build/
 input.txt
-/ac-library
+graph.png
+graph.dot
+__pycache__/

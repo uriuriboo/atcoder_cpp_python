@@ -1,14 +1,21 @@
-FROM python:3.8
-ARG USERNAME=vscode
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
+# AtCoder の言語環境（2025-10）に合わせる: C++23 (GCC 15.2.0)・Python (CPython 3.13.7)・Python (PyPy 3.11-v7.3.20)
+# Ubuntu 26.04 は apt の g++ が GCC 15.2、pypy3 が 7.3.20 で、AtCoder と同じ
+FROM mcr.microsoft.com/devcontainers/base:3-ubuntu26.04
 
+# gdb はデバッガ、graphviz はグラフ可視化、gmp・boost は AtCoder にもあるライブラリ。ac-library は AtCoder と同じ v1.6
 RUN apt-get update \
-    && apt-get -y install --no-install-recommends apt-utils dialog 2>&1 \
-    && apt-get -y install git iproute2 procps lsb-release gdb\
-    && groupadd --gid $USER_GID $USERNAME \
-    && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
-    && apt-get install -y sudo \
-    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME\
-    && chmod 0440 /etc/sudoers.d/$USERNAME
-ENV PATH /home/vscode/.local/bin:$PATH
+    && apt-get install -y g++ gdb graphviz libgmp-dev libboost-dev pypy3 \
+    && git clone --depth 1 --branch v1.6 https://github.com/atcoder/ac-library.git /opt/ac-library
+
+# CPython は uv で入れ、AtCoder と同じライブラリ（requirements.txt）を入れた venv を PATH の先頭に置く
+# online-judge-tools（oj）は distutils を使うため、Python 3.12 以降では setuptools を一緒に入れる
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/
+COPY requirements.txt /tmp/
+USER vscode
+ENV VIRTUAL_ENV=/home/vscode/.venv PATH=/home/vscode/.venv/bin:/home/vscode/.local/bin:$PATH
+RUN uv venv --python 3.13.7 $VIRTUAL_ENV \
+    && uv pip install -r /tmp/requirements.txt \
+    && uv tool install --python 3.13.7 --with setuptools online-judge-tools
+
+# AddressSanitizer のメモリリーク検出を切る（new したまま終わるコードを RE にしないため）
+ENV ASAN_OPTIONS=detect_leaks=0

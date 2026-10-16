@@ -1,0 +1,3 @@
+# イメージのビルド（.devcontainer/Dockerfile）に使うのは requirements.txt だけ
+*
+!requirements.txt

@@ -1,17 +1,21 @@
 {
+    // エディタの補完・エラー表示を、debug ビルド（scripts/config.py）に合わせる
     "configurations": [
-    {
-      "name": "Linux",
-      "includePath": [
-          "/workspaces/atcoder_docker_sample/ac-library/",
-          "${workspaceFolder}/**"
-        ],
-      "defines": [],
-      "compilerPath": "/usr/bin/gcc",
-      "cStandard": "c11",
-      "cppStandard": "gnu++14",
-      "intelliSenseMode": "gcc-x64"
-    }
-  ],
-  "version": 4
+        {
+            "name": "Linux",
+            "includePath": [
+                "/opt/ac-library",
+                "${workspaceFolder}/**"
+            ],
+            "defines": [
+                "LOCAL",
+                "_GLIBCXX_DEBUG"
+            ],
+            "compilerPath": "/usr/bin/g++",
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++23",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
 }

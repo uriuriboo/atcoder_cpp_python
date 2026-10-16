@@ -1,81 +1,196 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "oj_download & test",
-            "type": "shell",
-            "command": "python",
-            "args": [
-                "${workspaceFolder}/scripts/oj_test.py",
-                "${file}"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": [],
-        },
-        {
-            "label": "oj_submit",
-            "type": "shell",
-            "command": "python",
-            "args": [
-                "${workspaceFolder}/scripts/oj_submit.py",
-                "${file}"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label":"clean tmp folder",
-            "type":"shell",
-            "command":"${workspaceFolder}/scripts/clean_tmp.sh"
-        },
-        {
-            "label": "graph viewer",
-            "type": "shell",
-            "command": "streamlit",
-            "args": [
-                "run",
-                "${workspaceFolder}/scripts/graph_visualization.py",
-                "${file}"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "cpp runner",
-            "type": "shell",
-            "command": "gcc",
-            "args": [
-                "-I",
-                "/workspaces/atcoder_docker_sample/ac-library/",
-                "${file}",
-                "-o",
-                "${workspaceFolder}/tmp/a.out",
-                "-lstdc++",
-                "-g",
-                "&&",
-                "${workspaceFolder}/tmp/a.out",
-                "&&",
-                "rm",
-                "-f",
-                "${workspaceFolder}/tmp/a.out",
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "cpp build",
-            "type": "shell",
-            "command": "gcc",
-            "args": [
-                "${file}",
-                "-o",
-                "${workspaceFolder}/tmp/a.out",
-                "-lstdc++",
-                "-g",
-            ],
-            "problemMatcher": []
-        },
-    ]
+	// タスクはすべて scripts/ の Python を呼ぶ。${file}（開いているファイル）から、解いている問題を判定する
+	// options.statusbar は拡張機能 actboy168.tasks の設定。よく使うタスクだけをステータスバーのボタンにする（hide: true は出さない）
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "new contest",
+			"type": "shell",
+			"command": "python3",
+			"args": [
+				"${workspaceFolder}/scripts/new_contest.py",
+				"${input:contest}"
+			],
+			"options": {
+				"statusbar": {
+					"label": "$(add) new contest",
+					"detail": "コンテストの問題とサンプルを用意する"
+				}
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "build",
+			"type": "shell",
+			"command": "python3",
+			"args": [
+				"${workspaceFolder}/scripts/build.py",
+				"${file}"
+			],
+			"options": {
+				"statusbar": {
+					"hide": true
+				}
+			},
+			"group": "build",
+			"problemMatcher": "$gcc"
+		},
+		{
+			"label": "build & test",
+			"type": "shell",
+			"command": "python3",
+			"args": [
+				"${workspaceFolder}/scripts/test.py",
+				"${file}"
+			],
+			"options": {
+				"statusbar": {
+					"label": "$(beaker) test",
+					"detail": "build & test：ビルドしてサンプルでテストする（Ctrl+Shift+B）"
+				}
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": "$gcc"
+		},
+		{
+			"label": "build & test release",
+			"type": "shell",
+			"command": "python3",
+			"args": [
+				"${workspaceFolder}/scripts/test.py",
+				"--release",
+				"${file}"
+			],
+			"options": {
+				"statusbar": {
+					"label": "$(dashboard) release",
+					"detail": "build & test release：AtCoder と同じ最適化でテストする（実行時間の確認）"
+				}
+			},
+			"group": "build",
+			"problemMatcher": "$gcc"
+		},
+		{
+			"label": "run (input.txt)",
+			"type": "shell",
+			"command": "python3",
+			"args": [
+				"${workspaceFolder}/scripts/run.py",
+				"${file}"
+			],
+			"options": {
+				"statusbar": {
+					"label": "$(play) run",
+					"detail": "run (input.txt)：input.txt を入力にして実行する"
+				}
+			},
+			"group": "build",
+			"problemMatcher": "$gcc"
+		},
+		{
+			"label": "submit",
+			"type": "shell",
+			"command": "python3",
+			"args": [
+				"${workspaceFolder}/scripts/submit.py",
+				"${file}"
+			],
+			"options": {
+				"statusbar": {
+					"label": "$(cloud-upload) submit",
+					"detail": "サンプルでテストし、通ったら提出ページをブラウザで開く"
+				}
+			},
+			"problemMatcher": "$gcc"
+		},
+		{
+			"label": "stress: init",
+			"type": "shell",
+			"command": "python3",
+			"args": [
+				"${workspaceFolder}/scripts/stress.py",
+				"init",
+				"${file}"
+			],
+			"options": {
+				"statusbar": {
+					"hide": true
+				}
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "stress: hack",
+			"type": "shell",
+			"command": "python3",
+			"args": [
+				"${workspaceFolder}/scripts/stress.py",
+				"hack",
+				"${file}"
+			],
+			"options": {
+				"statusbar": {
+					"hide": true
+				}
+			},
+			"problemMatcher": "$gcc"
+		},
+		{
+			"label": "stress: test",
+			"type": "shell",
+			"command": "python3",
+			"args": [
+				"${workspaceFolder}/scripts/stress.py",
+				"test",
+				"${file}"
+			],
+			"options": {
+				"statusbar": {
+					"hide": true
+				}
+			},
+			"problemMatcher": "$gcc"
+		},
+		{
+			"label": "visualize graph",
+			"type": "shell",
+			"command": "python3",
+			"args": [
+				"${workspaceFolder}/scripts/visualize.py",
+				"${workspaceFolder}/input.txt"
+			],
+			"options": {
+				"statusbar": {
+					"hide": true
+				}
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "visualize graph (directed)",
+			"type": "shell",
+			"command": "python3",
+			"args": [
+				"${workspaceFolder}/scripts/visualize.py",
+				"${workspaceFolder}/input.txt",
+				"--directed"
+			],
+			"options": {
+				"statusbar": {
+					"hide": true
+				}
+			},
+			"problemMatcher": []
+		}
+	],
+	"inputs": [
+		{
+			"id": "contest",
+			"description": "コンテスト ID（abc325 など）か URL",
+			"type": "promptString"
+		}
+	]
 }
