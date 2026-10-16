@@ -1,28 +1,33 @@
+// For format details, see https://aka.ms/devcontainer.json
 {
-"name": "Python 3",
-    "context": "..",
-    "dockerFile": "Dockerfile",
-
-    "settings": { 
-        "terminal.integrated.shell.linux": "/bin/bash",
-        "python.pythonPath": "/usr/local/bin/python",
-        "python.linting.enabled": true,
-        "python.linting.pylintEnabled": true,
-        "python.linting.pylintPath": "/usr/local/bin/pylint"
-    },
-
-    "appPort": [ 8501 ],
-
-    "postCreateCommand": "pip install -r requirements.txt && apt-get install -y gdb",
-
-    "remoteUser": "vscode",
-
-    "extensions": [
-		"ms-python.python",
-		"coenraads.bracket-pair-colorizer-2",
-		"sanaajani.taskrunnercode",
-		"vscode-icons-team.vscode-icons",
-		"ms-vscode.cpptools",
-		"austin.code-gnu-global"
-    ],
+	"name": "atcoder-cpp-python",
+	// ツールをイメージのレイヤーにキャッシュするため Dockerfile を使う。requirements.txt を COPY するため、コンテキストはリポジトリ直下
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": ".."
+	},
+	// Windows ホストの bind mount はファイル I/O が遅いため、ビルド成果物（プリコンパイルヘッダを含む）は名前付きボリュームに置く
+	"mounts": [
+		"source=atcoder-cpp-python-build,target=${containerWorkspaceFolder}/build,type=volume"
+	],
+	// gdb と AddressSanitizer が ptrace を使うため
+	"runArgs": [
+		"--cap-add=SYS_PTRACE",
+		"--security-opt",
+		"seccomp=unconfined"
+	],
+	"postCreateCommand": "bash .devcontainer/postCreateCommand.bash",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-vscode.cpptools",
+				// Python。補完の Pylance とデバッガの debugpy も一緒に入る
+				"ms-python.python",
+				// Python のチェックと自動フォーマット
+				"charliermarsh.ruff",
+				// よく使うタスクをステータスバーのボタンにする（.vscode/tasks.json の options.statusbar）
+				"actboy168.tasks"
+			]
+		}
+	}
 }

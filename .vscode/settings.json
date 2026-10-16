@@ -1,0 +1,17 @@
+{
+    // C++ は保存時にフォーマットする（スタイルはルートの .clang-format）
+    "[cpp]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "ms-vscode.cpptools"
+    },
+    "C_Cpp.clang_format_style": "file",
+    // Python は AtCoder と同じライブラリを入れた環境で補完し、保存時に Ruff でフォーマットする（Dockerfile）
+    "python.defaultInterpreterPath": "/home/vscode/.venv/bin/python",
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "charliermarsh.ruff"
+    },
+    "files.exclude": {
+        "**/__pycache__": true
+    }
+}

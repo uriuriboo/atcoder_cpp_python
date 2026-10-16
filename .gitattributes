@@ -1,0 +1,2 @@
+# コンテナ（Linux）で動かすため、Windows でチェックアウトしても改行を LF にする（CRLF だと bash が動かない）
+* text=auto eol=lf

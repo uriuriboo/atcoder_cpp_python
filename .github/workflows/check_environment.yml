@@ -1,0 +1,24 @@
+name: Check Environment
+
+on:
+  push:
+    branches: '**'
+    # ドキュメントだけの変更では環境に影響しないため動かさない（ほかのファイルも変わっていれば動く）
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v7
+
+    # devcontainer と同じイメージ（.devcontainer/Dockerfile）をビルドし、その中で確認する
+    - name: Build devcontainer and run checks
+      uses: devcontainers/ci@v0.3
+      with:
+        push: never
+        runCmd: bash .github/ci/check.bash
