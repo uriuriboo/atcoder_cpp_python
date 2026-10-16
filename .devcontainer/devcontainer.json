@@ -1,6 +1,6 @@
 // For format details, see https://aka.ms/devcontainer.json
 {
-	"name": "atcoder-cpp-py",
+	"name": "atcoder-cpp-python",
 	// ツールをイメージのレイヤーにキャッシュするため Dockerfile を使う。requirements.txt を COPY するため、コンテキストはリポジトリ直下
 	"build": {
 		"dockerfile": "Dockerfile",
@@ -8,7 +8,7 @@
 	},
 	// Windows ホストの bind mount はファイル I/O が遅いため、ビルド成果物（プリコンパイルヘッダを含む）は名前付きボリュームに置く
 	"mounts": [
-		"source=atcoder-cpp-py-build,target=${containerWorkspaceFolder}/build,type=volume"
+		"source=atcoder-cpp-python-build,target=${containerWorkspaceFolder}/build,type=volume"
 	],
 	// gdb と AddressSanitizer が ptrace を使うため
 	"runArgs": [

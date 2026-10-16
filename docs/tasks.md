@@ -101,7 +101,7 @@ debug ビルドしてサンプルでテストし、すべて通ったときだ�
 | --- | --- |
 | AtCoder と同じ GCC 15.2.0・CPython 3.13.7・PyPy 3.11・ac-library v1.6 | `Dockerfile` |
 | ツールを、コンテナを作るたびに入れ直さない | `Dockerfile`（イメージのレイヤーにキャッシュ） |
-| ビルド成果物を Windows ホストの bind mount に置かない | `devcontainer.json` の `mounts`（`build/` を名前付きボリューム `atcoder-cpp-py-build` に） |
+| ビルド成果物を Windows ホストの bind mount に置かない | `devcontainer.json` の `mounts`（`build/` を名前付きボリューム `atcoder-cpp-python-build` に） |
 | gdb と AddressSanitizer が動く | `devcontainer.json` の `runArgs`（`SYS_PTRACE`・`seccomp=unconfined`） |
 | メモリリークを RE にしない | `Dockerfile` の `ASAN_OPTIONS=detect_leaks=0` |
 

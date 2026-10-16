@@ -200,7 +200,7 @@ python3 scripts/stress.py hack contests/abc325/a.cpp
 
 ### ディスクの容量を空けたい
 
-ビルド成果物（プリコンパイルヘッダを含む）は Docker ボリューム `atcoder-cpp-py-build` に置かれ、コンテナを作り直しても残る。コンテナを止めてから、ホストで `docker volume rm atcoder-cpp-py-build` を実行すると消せる。
+ビルド成果物（プリコンパイルヘッダを含む）は Docker ボリューム `atcoder-cpp-python-build` に置かれ、コンテナを作り直しても残る。コンテナを止めてから、ホストで `docker volume rm atcoder-cpp-python-build` を実行すると消せる。
 
 ## 制限
 
